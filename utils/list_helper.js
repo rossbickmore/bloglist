@@ -32,18 +32,18 @@ const favoriteBlog = (blogs) => {
   }
 }
 
+const uniqAuthors = (blogs) => {
+  let result = [blogs[0].author]
+  for (let i = 1; i < blogs.length -1; i++) {
+    if (result.indexOf(blogs[i].author) === -1) {
+      result.push(blogs[i].author)
+    }
+  }
+  return result
+}
+
 const mostBlogs = (blogs) => {
 
-  const uniqAuthors = (blogs) => {
-    let result = [blogs[0].author]
-    for (let i = 1; i < blogs.length -1; i++) {
-      if (result.indexOf(blogs[i].author) === -1) {
-        result.push(blogs[i].author)
-      }
-    }
-    return result
-  }
-  
   const countBlogs = (blogs, author) => {
     let numberOfBlogs = 0
     for (let i = 0; i < blogs.length; i++) {
@@ -66,9 +66,33 @@ const mostBlogs = (blogs) => {
   return result.sort( (a,b) => b.blogs - a.blogs)[0]
 }
 
+const mostLikes = (blogs) => {
+  const countLikes = (blogs, author) => {
+    let numberOfLikes = 0
+    for (let i = 0; i < blogs.length; i++) {
+      if (blogs[i].author == author) {
+        numberOfLikes += blogs[i].likes
+      }
+    }
+    return numberOfLikes
+  }
+
+  let arr = uniqAuthors(blogs)
+  let result = []
+  for (let i = 0; i < arr.length; i++) {
+    let obj = {
+      author: arr[i],
+      likes: countLikes(blogs,arr[i])
+    }
+    result.push(obj)
+  }
+  return result.sort( (a,b) => b.likes - a.likes)[0]
+}
+
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
