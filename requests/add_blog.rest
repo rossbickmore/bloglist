@@ -1,9 +1,9 @@
 post http://localhost:3003/api/blogs 
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1ZDkzODVmZTJlOGEyZTY3MDc0ZThjM2QiLCJpYXQiOjE1Njk5NDkyMDF9.f9h79N1X0mbkrZ-9cxvrCZlEUaTzJLmlvd-Zb5ZEDF8
 
 {
     "title": "How to be a man",
     "author": "David Lithario",
-    "url": "youtube.com",
-    "likes": 0
+    "url": "youtube.com"
 }
