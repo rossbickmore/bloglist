@@ -1,0 +1,8 @@
+post http://localhost:3003/api/blogs Content-Type: application/json
+
+{
+    "title": "How to be a man",
+    "author": "David Lithario",
+    "url": "youtube.com",
+    "likes": 0
+}
