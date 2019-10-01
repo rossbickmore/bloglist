@@ -3,6 +3,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const User = require('../models/user')
 const api = supertest(app)
+const helper = require('./test_helper')
 
 describe('when there is initially one user at db', () => {
   beforeEach(async () => {
@@ -54,6 +55,26 @@ describe('when there is initially one user at db', () => {
     expect(usersAtEnd.length).toBe(usersAtStart.length)
   })
   
+  test('creation fails with proper statuscode and message if password or username is not submited or invalid', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'rt',
+      name: 'Superuser',
+      password: 's',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('password or username must be over 3 characters long')
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd.length).toBe(usersAtStart.length)
+  })
+
 })
 
 test('the unique identifier property of the blog posts is named id', async () => {
