@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import loginService from './services/login'
 import blogService from './services/blogs'
-import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
+import CreateNewBlogForm from './components/CreateNewBlogForm'
 
 function App() {
   const [author, setAuthor] = useState("")
@@ -53,38 +54,7 @@ function App() {
     }
   }
 
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
-  }
-  const login = () => (
-      <div>
-        <div style={ errorMessage == null ? null : {border: "3px solid red", backgroundColor: "grey", padding: 5}}>
-          {errorMessage}
-        </div>
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-              <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            password
-              <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
-      </div> 
-  )
+  
 
   const addBlog = async (event) => {
     event.preventDefault()
@@ -108,51 +78,40 @@ function App() {
     })
   }
 
-  const notification = () => {
-    return (
-      <p>a new blog entitled {newBlog.title} has been added by {newBlog.author}</p>
-    )
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedBlogappUser')
+    setUser(null)
   }
-
   
   
   if (user === null) {
     return (
       <div>
-        <h2>Log in to application</h2>
-        {login()}
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+          errorMessage={errorMessage}
+        />
       </div>
     )
   }
 
   return (
     <div>
-      <h2>blogs</h2>
-      <div style={newBlog === null ? null : {border : "3px solid green", backgroundColor: "grey"}}>
-        {newBlog === null ? null : notification()}
+        <CreateNewBlogForm 
+          user={user}
+          newBlog={newBlog}
+          blogs={blogs}
+          addBlog={addBlog}
+          handleAuthorChange={({ target }) => setAuthor(target.value)}
+          handleTitleChange={({ target }) => setTitle(target.value)}
+          handleUrlChange={({ target }) => setUrl(target.value)}
+          handleSubmit={handleLogout}
+        />
       </div>
-      {user.name} has logged in
-      <button type="submit" onClick={handleLogout}>logout</button>
-      {blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
-      )}
-      <h2>Add blog</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          title
-          <input value={title} onChange={({target}) => setTitle(target.value)} />
-        </div>
-        <div>
-          author
-          <input value={author} onChange={({target}) => setAuthor(target.value)} />
-        </div>
-        <div>
-          url
-          <input value={url} onChange={({target}) => setUrl(target.value)} />
-        </div>
-        <button type="submit">add blog</button>
-      </form>
-    </div>
   )
 }
 
