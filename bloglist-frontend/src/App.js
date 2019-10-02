@@ -3,6 +3,9 @@ import loginService from './services/login'
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import CreateNewBlogForm from './components/CreateNewBlogForm'
+import Togglable from './components/Togglable'
+import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 
 function App() {
   const [author, setAuthor] = useState("")
@@ -99,8 +102,17 @@ function App() {
     )
   }
 
+
   return (
     <div>
+      <BlogList 
+        newBlog={newBlog}
+        user={user}
+        blogs={blogs}
+        handleLogout={handleLogout}
+      />
+      <h2>Add blog</h2>
+      <Togglable buttonLabel='CreateNewBlogForm'>
         <CreateNewBlogForm 
           user={user}
           newBlog={newBlog}
@@ -111,7 +123,8 @@ function App() {
           handleUrlChange={({ target }) => setUrl(target.value)}
           handleSubmit={handleLogout}
         />
-      </div>
+      </Togglable>
+    </div>
   )
 }
 
