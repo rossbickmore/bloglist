@@ -8,6 +8,7 @@ function App() {
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
   const [blogs, setBlogs] = useState([]) 
+  const [newBlog, setNewBlog] = useState(null)
   const [showAll, setShowAll] = useState(true)
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState("")
@@ -58,26 +59,29 @@ function App() {
   }
   const login = () => (
       <div>
+        <div style={ errorMessage == null ? null : {border: "3px solid red", backgroundColor: "grey", padding: 5}}>
+          {errorMessage}
+        </div>
         <form onSubmit={handleLogin}>
-        <div>
-          username
-            <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-            <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
+          <div>
+            username
+              <input
+              type="text"
+              value={username}
+              name="Username"
+              onChange={({ target }) => setUsername(target.value)}
+            />
+          </div>
+          <div>
+            password
+              <input
+              type="password"
+              value={password}
+              name="Password"
+              onChange={({ target }) => setPassword(target.value)}
+            />
+          </div>
+          <button type="submit">login</button>
         </form>
       </div> 
   )
@@ -90,6 +94,10 @@ function App() {
       url: url,
       user: user
     }
+    setNewBlog(blogObject)
+    setTimeout(() => {
+      setNewBlog(null)
+    }, 5000)
     blogService
       .create(blogObject)
       .then(data => {
@@ -98,6 +106,12 @@ function App() {
         setAuthor('')
         setUrl('')
     })
+  }
+
+  const notification = () => {
+    return (
+      <p>a new blog entitled {newBlog.title} has been added by {newBlog.author}</p>
+    )
   }
 
   
@@ -114,6 +128,9 @@ function App() {
   return (
     <div>
       <h2>blogs</h2>
+      <div style={newBlog === null ? null : {border : "3px solid green", backgroundColor: "grey"}}>
+        {newBlog === null ? null : notification()}
+      </div>
       {user.name} has logged in
       <button type="submit" onClick={handleLogout}>logout</button>
       {blogs.map(blog =>
